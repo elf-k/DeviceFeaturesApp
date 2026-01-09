@@ -1,17 +1,15 @@
-import { View, Text, Button, StyleSheet } from "react-native";
+import { View, Button, StyleSheet } from "react-native";
 
 export default function HomeScreen({ navigation }) {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Device Features App</Text>
-
       <Button
-        title="Go to Camera"
+        title="Camera & Gallery"
         onPress={() => navigation.navigate("Camera")}
       />
 
       <Button
-        title="Go to Location"
+        title="Location"
         onPress={() => navigation.navigate("Location")}
       />
     </View>
@@ -21,13 +19,8 @@ export default function HomeScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    gap: 16,
     justifyContent: "center",
-    alignItems: "center",
-    gap: 12,
-  },
-  title: {
-    fontSize: 22,
-    fontWeight: "bold",
-    marginBottom: 20,
+    padding: 20,
   },
 });
