@@ -1,9 +1,44 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, Button, Alert, StyleSheet } from "react-native";
+import * as Location from "expo-location";
+import * as Notifications from "expo-notifications";
+import { useState } from "react";
 
 export default function LocationScreen() {
+  const [coords, setCoords] = useState(null);
+
+  const getLocation = async () => {
+    const { status } =
+      await Location.requestForegroundPermissionsAsync();
+
+    if (status !== "granted") {
+      Alert.alert("Location permission required");
+      return;
+    }
+
+    const location = await Location.getCurrentPositionAsync({});
+    setCoords(location.coords);
+
+    await Notifications.requestPermissionsAsync();
+
+    await Notifications.scheduleNotificationAsync({
+      content: {
+        title: "Location Retrieved",
+        body: "Your GPS location was successfully fetched.",
+      },
+      trigger: null,
+    });
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Location Screen</Text>
+      <Button title="Get Current Location" onPress={getLocation} />
+
+      {coords && (
+        <Text>
+          Lat: {coords.latitude} {"\n"}
+          Lng: {coords.longitude}
+        </Text>
+      )}
     </View>
   );
 }
@@ -11,10 +46,8 @@ export default function LocationScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  text: {
-    fontSize: 18,
+    gap: 16,
+    padding: 20,
   },
 });
+
